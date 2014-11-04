@@ -2,9 +2,7 @@
 
 A library for integrating Spark SQL with [Scala Records](https://github.com/scala-records/scala-records)
                                                                                                                                                                                       
-**This is an experimental feature of Spark SQL and is intended primarily to get feedback from users.  APIs may change in future versions.**
-
-This PR adds a string interpolator that allows users to run Spark SQL queries that return type-safe
+This library adds a string interpolator that allows users to run Spark SQL queries that return type-safe
 results in Scala. SQL interpolation is invoked by prefixing a string literal with `sql`, and supports including RDDs using `$`. For example:
 
 ```scala
