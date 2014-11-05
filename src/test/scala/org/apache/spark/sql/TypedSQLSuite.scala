@@ -21,6 +21,7 @@ import org.scalatest.FunSuite
 
 import records.Rec
 
+import org.apache.spark.sql.execution.debug._
 import org.apache.spark.sql.test.TestSQLContext
 
 import scala.math.BigDecimal
@@ -63,8 +64,18 @@ class TypedSqlSuite extends FunSuite {
     Seq(Car(Person("Michael", 30), "GrandAm"), Car(Person("Mary", 52), "Buick")))
 
   test("records to SchemaRDD") {
-    val people = sparkContext.parallelize(Rec("name" -> "Michael", "age" -> 30) :: Nil)
+    val people = sparkContext.parallelize(
+      Rec("name" -> "Michael", "age" -> 30) :: Nil)
     people.registerTempTable("people")
+
+    assert(people.schema("name").dataType === StringType)
+    assert(people.schema("age").dataType === IntegerType)
+
+    /*
+    val result = sql"SELECT name, age FROM $people".first()
+    assert(result.name === "Michael")
+    assert(result.age === 30)
+    */
   }
 
   test("typed query") {

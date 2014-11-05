@@ -271,8 +271,7 @@ class TypedSQLContext(sqlContext: SQLContext) {
 
   implicit def recordsToSchemaRDD[T <: Rec: TypeTag](baseRDD: RDD[T]): SchemaRDD = {
     val fields = typeTag[T].tpe.members.filter(_.isMacro).map { f =>
-      // How do I get the type of `f` here.  Calling .typeSignature returns `=> Int` which is not what I want?
-      StructField(f.name.toString, IntegerType)
+      StructField(f.name.toString, ScalaReflection.schemaFor(f.asMethod.returnType).dataType)
     }.toSeq
 
     // TODO: Do this with macros instead
